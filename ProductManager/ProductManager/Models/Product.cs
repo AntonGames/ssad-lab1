@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductManager.Models
 {
     public class Product
     {
+        [Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Product name is required")]
@@ -18,6 +20,8 @@ namespace ProductManager.Models
         [Required(ErrorMessage = "Price is required")]
         [Range(0.01, 999999.99, ErrorMessage = "Price must be between 0.01 and 999,999.99")]
         [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18, 2)")]
+        [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode = false)]
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Quantity is required")]
