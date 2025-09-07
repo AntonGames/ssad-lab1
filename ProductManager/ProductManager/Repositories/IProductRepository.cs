@@ -1,8 +1,8 @@
 ﻿using ProductManager.Models;
 
-namespace ProductManager.Services
+namespace ProductManager.Repositories
 {
-    public interface IProductService
+    public interface IProductRepository
     {
         Task<List<Product>> GetAllAsync();
         Task<Product?> GetByIdAsync(int id);

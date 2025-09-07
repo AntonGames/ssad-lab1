@@ -1,50 +1,45 @@
 ﻿using ProductManager.Models;
+using ProductManager.Repositories;
 
 namespace ProductManager.Services
 {
     public class ProductService : IProductService
     {
-        // In-memory storage (no database required)
-        private static List<Product> _products = new List<Product>
-        {
-            new Product { Id = 1, Name = "Laptop", Description = "High-performance laptop for professionals", Price = 999.99m, Quantity = 10 },
-            new Product { Id = 2, Name = "Mouse", Description = "Wireless ergonomic mouse with precision tracking", Price = 29.99m, Quantity = 50 },
-            new Product { Id = 3, Name = "Keyboard", Description = "Mechanical keyboard with RGB backlighting", Price = 89.99m, Quantity = 25 }
-        };
+        private readonly IProductRepository _repository;
 
-        private static int _nextId = 4;
-
-        public List<Product> GetAll()
+        public ProductService(IProductRepository repository)
         {
-            return _products;
+            _repository = repository;
         }
 
-        public Product? GetById(int id)
+        public async Task<List<Product>> GetAllAsync()
         {
-            return _products.FirstOrDefault(p => p.Id == id);
+            return await _repository.GetAllAsync();
         }
 
-        public void Add(Product product)
+        public async Task<Product?> GetByIdAsync(int id)
         {
-            product.Id = _nextId++;
-            _products.Add(product);
+            return await _repository.GetByIdAsync(id);
         }
 
-        public void Update(Product product)
+        public async Task<Product> AddAsync(Product product)
         {
-            var existing = _products.FirstOrDefault(p => p.Id == product.Id);
-            if (existing != null)
-            {
-                existing.Name = product.Name;
-                existing.Description = product.Description;
-                existing.Price = product.Price;
-                existing.Quantity = product.Quantity;
-            }
+            return await _repository.AddAsync(product);
         }
 
-        public void Delete(int id)
+        public async Task UpdateAsync(Product product)
         {
-            _products.RemoveAll(p => p.Id == id);
+            await _repository.UpdateAsync(product);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _repository.DeleteAsync(id);
+        }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _repository.ExistsAsync(id);
         }
     }
 }

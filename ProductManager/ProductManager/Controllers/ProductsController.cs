@@ -8,23 +8,22 @@ namespace ProductManager.Controllers
     {
         private readonly IProductService _productService;
 
-        // Dependency Injection through constructor
         public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
 
         // GET: Products
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _productService.GetAll();
+            var products = await _productService.GetAllAsync();
             return View(products);
         }
 
         // GET: Products/Details/5
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var product = _productService.GetById(id);
+            var product = await _productService.GetByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -41,20 +40,20 @@ namespace ProductManager.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product product)
+        public async Task<IActionResult> Create(Product product)
         {
             if (ModelState.IsValid)
             {
-                _productService.Add(product);
+                await _productService.AddAsync(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
         // GET: Products/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var product = _productService.GetById(id);
+            var product = await _productService.GetByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -65,7 +64,7 @@ namespace ProductManager.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Product product)
+        public async Task<IActionResult> Edit(int id, Product product)
         {
             if (id != product.Id)
             {
@@ -74,16 +73,16 @@ namespace ProductManager.Controllers
 
             if (ModelState.IsValid)
             {
-                _productService.Update(product);
+                await _productService.UpdateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
         // GET: Products/Delete/5
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var product = _productService.GetById(id);
+            var product = await _productService.GetByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -94,9 +93,9 @@ namespace ProductManager.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _productService.Delete(id);
+            await _productService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }
